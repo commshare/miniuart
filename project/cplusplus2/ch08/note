@@ -68,12 +68,30 @@ void foox(A &a,B &b)
 //----------------------------------------------
 
 
+class A {
+private:
+	int a,b;
+	static int c;
+pulbic:
+	static int foo1(A &);
+	int foo2();
+}
 
+int A::c = 4;
 
+int A::foo2()
+{
+	a = 1; //ok
+	b = 2; //ok
+	c = 3; //ok
+}
 
-
-
-
+int A::foo1(A &x) 
+{
+	x.a  = 1;     //ok
+	A::a = 2;     //ok
+	this->a = 12; //error
+}
 
 
 
