@@ -1,0 +1,80 @@
+friend
+
+case 1:
+//----------------------------------------------
+class B;
+class A {
+	int a,b;
+public:
+	friend void B::foob();
+};
+
+class B {
+	void fooa(A & ca) {
+		ca.a = 1; // error
+		ca.b = 2; // error
+	}
+	void foob(A & ca) {
+		ca.a = 1; // ok
+		ca.b = 2; // ok
+	}
+}
+//----------------------------------------------
+
+case 2:
+//----------------------------------------------
+class B;
+class A {
+	int a,b;
+public:
+	friend class B;
+};
+
+class B {
+	void fooa(A & ca) {
+		ca.a = 1; // ok
+		ca.b = 2; // ok
+	}
+	void foob(A & ca) {
+		ca.a = 1; // ok
+		ca.b = 2; // ok
+	}
+}
+//----------------------------------------------
+
+case 3:
+//----------------------------------------------
+void foox(A &a,B &b);
+class B;
+class A {
+	int a,b;
+public:
+	friend void foox(A &a,B &b);
+};
+
+class B {
+	int m,n;
+public:
+	friend void foox(A &a,B &b);
+}
+
+void foox(A &a,B &b)
+{
+	a.a = 1; //ok
+	a.b = 2; //ok
+	b.m = 1; //ok
+	b.n = 2; //ok
+}
+//----------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
