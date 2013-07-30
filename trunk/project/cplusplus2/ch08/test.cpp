@@ -15,11 +15,14 @@ public:
         return b;
     }
 
-
-    friend ostream& operator<<(ostream &a,A &m) {
-        return a << m.a << endl;
-    }
+    friend ostream& operator<<(ostream &a,const A& m);
 };
+
+ostream& operator<<(ostream &a,const A& m) 
+{
+    return a << m.a << endl;
+}
+
 
 int main()
 {
