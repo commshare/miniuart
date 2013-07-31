@@ -14,13 +14,12 @@ public:
 
 	~Vector() {
 		delete v;
+        cout << "Vector Destructing...\n";
 	}
 
 	int size() {
 		return sz;
 	}
-	
-	void set(int);
 	
 	void display();
 	
@@ -82,6 +81,7 @@ public:
 	Matrix(istream & in);
 	Matrix(const Matrix &m);
 	~Matrix() {
+        cout << "Matrix destructing...\n";
 		delete m;
 	}
 
@@ -105,7 +105,7 @@ Matrix::Matrix(istream & in)
 			in >> m[i*szr+j];
 		}
 	}
-	cout << "Matrix Contructor #1" <<endl;
+	cout << "Matrix Constructor #1" <<endl;
 }
 
 Matrix::Matrix(const Matrix & ma)
@@ -119,7 +119,7 @@ Matrix::Matrix(const Matrix & ma)
 			m[i*szr+j] = ma.m[i*szr+j];
 		}
 	}
-	cout << "Matrix Contructor #2" <<endl;
+	cout << "Matrix Constructor #2" <<endl;
 }
 
 int& Matrix::elem(int i,int j) 
@@ -138,7 +138,7 @@ Vector multiply(Matrix &m,Vector &v)
 		exit(1);
 	}
 	
-	Vector r(v);
+	Vector r(m.sizeL());
 	
 	for (int i=0;i<m.sizeL();i++) {
 		r[i] = 0;
