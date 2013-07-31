@@ -72,7 +72,7 @@ class A {
 private:
 	int a,b;
 	static int c;
-pulbic:
+public:
 	static int foo1(A &);
 	int foo2();
 }
@@ -89,8 +89,8 @@ int A::foo2()
 int A::foo1(A &x) 
 {
 	x.a  = 1;     //ok
-	A::a = 2;     //ok
-	this->a = 12; //error
+	A::c = 2;     //ok
+	this->c = 12; //error
 }
 
 
