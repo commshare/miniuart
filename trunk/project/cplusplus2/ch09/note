@@ -1,0 +1,47 @@
+
+
+A a(1,2,3);
+A a(1,2);
+A a(1)
+A a;   //ok
+A a(); //function declaration
+
+
+//constructor order is same as member's definations!!!!
+class A {
+	X x;
+	Y y;
+	Z z;
+public:
+	A (int a,int b, int c):z(a),x(b),y(c) {
+		//no matter 
+		//init order
+		X -> Y - > Z;// same as defination!!!
+	}
+}
+
+//destructor order 
+int main() {
+	A a;
+	B b;
+	C c;
+}
+//desctructor order: ~c ->  ~b -> ~a
+
+
+
+2 kinds of constructor
+
+//copy constructor
+I . A(A &s);                 
+//assign constructor (overload operator =)
+//considering if (this == &s)  for( a = a)
+II. A& operator=(const A &s);  
+
+
+A a;        // no default constructor
+A b(a)	    // I . copy constructor
+A c = a;    // I . copy constructor !!!
+b = a;      // II. assign constructor
+
+
