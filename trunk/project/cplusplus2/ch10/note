@@ -1,0 +1,133 @@
+//3 kinds of inheritance mode
+class B{
+private:
+        int b1;
+protected:
+        int b2;
+public:
+        int b3;
+};
+ 
+class B1: private B{
+ 
+};
+class B2: protected B {
+ 
+};
+class B3: public B {
+ 
+};
+int main()
+{
+        B b;
+        b.b1;   //no  private
+        b.b2;   //no  protected
+        b.b3;   //yes public
+ 
+        B1 x;
+        x.b1;  //no  private + private => private
+        x.b2;  //no  protected + private => private
+        x.b3;  //no  public + private => private
+ 
+        B2 y;
+        y.b1;  //no  private + protected => private
+        y.b2;  //no  protected + protected =>protected
+        y.b3;  //no  public + protected => protected
+ 
+        B3 z;
+        z.b1;  //no  private + public => private
+        z.b2;  //no  protected + public =>protected
+        z.b3;  //yes  public + public => public
+}
+
+we can change to each other between protected and public,
+but we can't change private in base class to public or protected
+
+class B{
+private:
+        int b1;
+protected:
+        int b2;
+public:
+        int b3;
+        int b4;
+        int b5;
+};
+ 
+class B1: private B{
+private:
+        using B::b4; //ok public => private
+protected:
+        using B::b3; //ok public => protected
+public:
+        using B::b1; //error  private => public 
+        using B::b2; //ok protected => public
+};
+ 
+int main()
+{
+        B1 x;
+        x.b1;  //error  
+        x.b2;  //ok     b2 has been changed to public
+        x.b3;  //error  b3 has been changed to protected
+        x.b4;  //error  b4 has been changed to private
+        x.b5;  //error  public + private => private
+}
+
+
+//constructing order
+1. base constructors
+2. members constructors(as the order of declarations)
+3. self constructor
+
+
+//-------------------------------------------------
+#include <iostream>
+using namespace std;
+
+class A {
+public:
+        A() {cout << " A ";}
+        ~A(){cout << "~A ";}
+};
+
+class C {
+public:
+        C(int i=0){cout << " C ";}
+        ~C(){cout << "~C ";}
+};
+
+class D{
+public:
+        D(int i=0){cout << " D ";}
+        ~D() {cout << "~D ";}
+};
+
+class B:public A {
+        C c;
+        D d;
+public:
+        B():d(0),c(0){cout << " B ";}
+        ~B(){cout << "~B ";}
+};
+
+int main()
+{
+        B b;
+        cout << endl;
+        return 0;
+}
+//--------------------------------------------------
+ A  C  D  B
+~B ~D ~C ~A
+//--------------------------------------------------
+//constructing order:
+1. bass class: A
+2. members constructor (as the order of declarations) (c d)
+3. self constructor B
+
+//desctruing order
+1. self constructor B
+2. members (d c)
+3. bass class A
+
