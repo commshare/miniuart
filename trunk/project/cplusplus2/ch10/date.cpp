@@ -1,31 +1,20 @@
 //e0803.cpp
 #include "date.h"
 
-class Date {
-	int y,m,d;
-public :
-	Date(int a,int b,int c):y(a),m(b),d(c){setDate(a,b,c);}
-	Date & operator++();
-	Date operator++(int);
-	Date & operator +=(int);
-	bool operator<(const Date & d);
-	int operator-(const Date & d);
-	friend ostream& operator<<(ostream &o, Date &d);
-};
-static bool isleapyear(int y) 
+bool Date::isleapyear(int y) 
 {
 	return (y%400==0) || (y%4==0 && (y%100 != 0));
 }
 
-static int month_days[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
+int Date::month_days[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
 
 void Date::setDate(int year,int month,int day)
 {
 	if (year < 0 || month <=0 || month > 12 || day <= 0) {
 		exit(1);
 	}
-	int days = month_days[month];
-	if (isleapyear(y)) {
+	int days = Date::month_days[month];
+	if (Date::isleapyear(y)) {
 		days ++;
 	}
 	if (day > days) {
@@ -36,71 +25,120 @@ void Date::setDate(int year,int month,int day)
 	d = day;
 }
 
-Date& Date::operator++() 
+Date::Date(int a,int b,int c)
 {
-	int days = month_days[m];
-	if (isleapyear(y)) {
+	setDate(a,b,c);
+}
+
+Date & Date::operator++()
+{
+	int days = Date::month_days[m];
+	if (Date::isleapyear(y) && (m==2)) {
 		days++;
 	}
-	if (d == days) {
+	if (d++ == days) {
 		d = 1;
-		if (m++ == 13) {
+		if (m++ == 12) {
 			m = 1;
 			y++;
 		}
-	} else {
-		d++;
 	}
 	return *this;
 }
-
 
 Date Date::operator++(int ) 
 {
 	Date date(*this);
 
-	int days = month_days[m];
-	if (isleapyear(y)) {
+	int days = Date::month_days[m];
+	if (Date::isleapyear(y) && (m==2)) {
 		days++;
 	}
-	if (d == days) {
+	if (d++ == days) {
 		d = 1;
-		if (m++ == 13) {
+		if (m++ == 12) {
 			m = 1;
 			y++;
 		}
-	} else {
-		d++;
 	}
 	return date;
 }
 
 
-Date & operator +=(int a)
+Date & Date::operator +=(int a)
 {
 	while (a > 0) {
 		a--;
-		--(*this);
+		++(*this);
 	}
 	while (a < 0) {
-		a++
-		++(*this);
+		a++;
+		--(*this);
 	}
 	return *this;
 }
 
-Date & operator--()
+Date & Date::operator--()
 {
-		
+	if (--d == 0) {
+		if (--m == 0) {
+			y--;
+			m = 12;
+		}
+		d = month_days[m];
+		if ((m == 2) && Date::isleapyear(y)) {
+			d++;
+		}
+	}
+	return *this;
 }
 
-bool operator<(const Date & s)
+bool Date::operator<(const Date & s)
 {
-	return (y > s.y|| m > s.m || d > s.d);
-
+	return ((y << 12) + (m << 8) + d) < ((s.y << 12) + (s.m << 8) + s.d);
 }
-int operator-(const Date & s)
+
+Date Date::operator +(int days)
 {
+	Date dt(*this);
+	dt += days;
+	return dt;
+}
+
+Date Date::operator -(int days)
+{
+	Date dt(*this);
+	dt += (-days);
+	return dt;
+}
+
+int Date::operator-(const Date & s)
+{
+	Date dt(*this);
+	int r = 0;
 	
+	if (dt > s) {
+		do {
+			--dt;
+			r++;
+		} while(dt > s);
+	} else if (dt < s) {
+		do {
+			++dt;
+			r--;
+		} while(dt < s);
+	} else {
+		cout << "equal\n";
+	}
+	return r;
+}
 
+bool Date::operator>(const Date & s)
+{
+	return ((y << 12) + (m << 8) + d) > ((s.y << 12) + (s.m << 8) + s.d);
+}
+
+bool Date::operator==(const Date & s)
+{
+	return (y == s.y && m == s.m && d == s.d);
 }
