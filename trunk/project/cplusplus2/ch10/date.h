@@ -8,7 +8,7 @@ using namespace std;
 
 class Date {
 	int y,m,d;
-	void Date::setDate(int year,int month,int day);
+	void setDate(int year,int month,int day);
 protected:
 	static bool isleapyear(int y);
 	static int month_days[13];
@@ -24,11 +24,11 @@ public :
 	bool operator<(const Date & s);
 	bool operator>(const Date & s);
 	bool operator==(const Date & s);
-	friend ostream& operator<<(ostream &o, Date &d);
+	friend ostream& operator<<(ostream &o,const Date &d);
 };
 
-inline ostream & operator<<(ostream &o,Date &d){
-	return o<<d.d<<"/"<<d.m<<"/"<<d.y<<std::endl;
+inline ostream & operator<<(ostream &o,const Date &d){
+	return o<<d.d<<"/"<<d.m<<"/"<<d.y <<" ";
 }
 
 #endif
