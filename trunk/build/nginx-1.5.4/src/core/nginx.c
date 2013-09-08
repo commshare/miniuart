@@ -199,7 +199,7 @@ static char **ngx_os_environ;
 
 
 int ngx_cdecl
-main(int argc, char *const *argv)
+ngx_main(int argc, char *const *argv)
 {
     ngx_int_t         i;
     ngx_log_t        *log;

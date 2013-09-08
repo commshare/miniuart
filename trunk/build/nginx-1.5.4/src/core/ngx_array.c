@@ -10,7 +10,7 @@
 
 
 ngx_array_t *
-ngx_array_create(ngx_pool_t *p, ngx_uint_t n, size_t size)
+    ngx_array_create(ngx_pool_t *p, ngx_uint_t n, size_t size)
 {
     ngx_array_t *a;
 
@@ -28,7 +28,7 @@ ngx_array_create(ngx_pool_t *p, ngx_uint_t n, size_t size)
 
 
 void
-ngx_array_destroy(ngx_array_t *a)
+    ngx_array_destroy(ngx_array_t *a)
 {
     ngx_pool_t  *p;
 
