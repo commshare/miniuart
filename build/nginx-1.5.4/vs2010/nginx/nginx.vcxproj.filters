@@ -360,6 +360,9 @@
     <ClCompile Include="..\..\objs\ngx_pch.c">
       <Filter>src\objs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\http\modules\ngx_http_stub_status_module.c">
+      <Filter>src\http\modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\core\ngx_config.h">
