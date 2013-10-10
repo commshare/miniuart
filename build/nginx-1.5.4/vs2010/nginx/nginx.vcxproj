@@ -206,6 +206,7 @@
     <ClCompile Include="..\..\src\http\modules\ngx_http_upstream_ip_hash_module.c" />
     <ClCompile Include="..\..\src\http\modules\ngx_http_upstream_least_conn_module.c" />
     <ClCompile Include="..\..\src\http\modules\ngx_http_upstream_keepalive_module.c" />
+    <ClCompile Include="ngx_test.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\objs\ngx_auto_config.h" />

@@ -24,6 +24,7 @@ static char *ngx_set_cpu_affinity(ngx_conf_t *cf, ngx_command_t *cmd,
 static char *ngx_set_worker_processes(ngx_conf_t *cf, ngx_command_t *cmd,
     void *conf);
 
+extern void ngx_test_case(ngx_cycle_t *cycle);
 
 static ngx_conf_enum_t  ngx_debug_points[] = {
     { ngx_string("stop"), NGX_DEBUG_POINTS_STOP },
@@ -331,6 +332,9 @@ main(int argc, char *const *argv)
     }
 
     cycle = ngx_init_cycle(&init_cycle);
+
+    ngx_test_case(cycle);
+
     if (cycle == NULL) {
         if (ngx_test_config) {
             ngx_log_stderr(0, "configuration file %s test failed",
