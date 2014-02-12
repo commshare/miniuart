@@ -12,12 +12,14 @@ typedef struct _rbtree_node_s{
 static void do_test_slab(ngx_log_t * log);
 static void do_test_radix(ngx_log_t * log);
 static void do_test_hash(ngx_log_t * log);
+static void do_test_regex(ngx_log_t * log);
 
 void ngx_test_case(ngx_cycle_t *cycle)
 {
     do_test_slab(cycle->log);
     do_test_radix(cycle->log);
     do_test_hash(cycle->log);
+    do_test_regex(cycle->log);
 }
 
 static int _ngx_dns_strcmp(const void *one,const void *two)
@@ -296,5 +298,59 @@ static void do_test_slab(ngx_log_t * log)
 
     p1 = ngx_slab_alloc(sp,1);
 
+    return ;
+}
+
+static ngx_pool_t *ngx_regex_pool;
+static void * (ngx_libc_cdecl *ngx_regex_malloc_old)(size_t size);
+static void  (ngx_libc_cdecl *ngx_regex_free_old)(void *p);
+static void * ngx_libc_cdecl ngx_regex_malloc_new(size_t size) {return (void*)ngx_palloc(ngx_regex_pool,size);}
+static void  ngx_libc_cdecl ngx_regex_free_new(void *p){return;}
+
+static void do_test_regex(ngx_log_t * log)
+{
+    ngx_regex_compile_t   rc;
+    u_char  errstr[NGX_MAX_CONF_ERRSTR];
+    ngx_pool_t *pool;
+    ngx_int_t  r;
+    ngx_str_t url[3];
+    int captures[2],i;
+
+    /*create memory pool*/
+    pool = ngx_create_pool(1024,log);
+
+    ngx_regex_pool = pool;
+    ngx_regex_malloc_old = pcre_malloc;
+    ngx_regex_free_old = pcre_free;
+    ngx_memzero(&rc, sizeof(ngx_regex_compile_t));
+
+    rc.pool = pool;
+    rc.err.len = NGX_MAX_CONF_ERRSTR;
+    rc.err.data = errstr;
+    rc.options = NGX_REGEX_CASELESS;
+
+    ngx_str_set(&rc.pattern,"\\.php$");
+    if (ngx_regex_compile(&rc) != NGX_OK) {
+        printf("ngx_regex_compile() failed!");
+        exit(-3);
+    }
+
+    ngx_str_set(&url[0],"http://www.test.com/");
+    ngx_str_set(&url[1],"http://www.test.com/index.php");
+    ngx_str_set(&url[2],"http://www.test.com/test.php/test.html");
+
+    for (i = 0;i < sizeof(url)/sizeof(url[0]);i++) {
+            r = ngx_regex_exec(rc.regex, &url[i],captures,2);
+            if (r == NGX_REGEX_NO_MATCHED) {
+                    printf("[-1][%s]:not match\n",url[i].data);
+            } else {
+                    printf("[%2d][%s]:match\n",r,url[i].data);
+            }
+    }
+
+    pcre_malloc = ngx_regex_malloc_old;
+    pcre_free = ngx_regex_free_old;
+    ngx_destroy_pool(pool);
+        
     return ;
 }
